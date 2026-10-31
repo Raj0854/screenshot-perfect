@@ -23,7 +23,7 @@ const schema = z.object({
   notes: z.string().max(1000).optional(),
 });
 
-function F({ name, label, children, err }: { name: string; label: string; children: React.ReactNode; err?: string }) {
+function F({ name, label, children, err }: { name: string; label: string; children: React.ReactNode; err?: string | undefined }) {
   return (
     <label className="block">
       <span className="mb-2 block text-xs tracking-widest uppercase text-muted-foreground">{label}</span>
@@ -69,19 +69,19 @@ function Book() {
           </div>
         ) : (
           <form noValidate onSubmit={submit} className="grid gap-6 rounded-sm bg-card p-8 shadow-soft md:grid-cols-2 md:p-12">
-            <F err={errors.name} name="name" label="Full name *"><input name="name" maxLength={100} className={input} /></F>
-            <F err={errors.phone} name="phone" label="Phone number *"><input name="phone" type="tel" className={input} placeholder="98765 43210" /></F>
-            <F err={errors.email} name="email" label="Email (optional)"><input name="email" type="email" className={input} /></F>
-            <F err={errors.service} name="service" label="Service *">
+            <F err={errors["name"]} name="name" label="Full name *"><input name="name" maxLength={100} className={input} /></F>
+            <F err={errors["phone"]} name="phone" label="Phone number *"><input name="phone" type="tel" className={input} placeholder="98765 43210" /></F>
+            <F err={errors["email"]} name="email" label="Email (optional)"><input name="email" type="email" className={input} /></F>
+            <F err={errors["service"]} name="service" label="Service *">
               <select name="service" defaultValue={service ?? ""} className={input}>
                 <option value="" disabled>Select a service</option>
                 {services.map((s) => <option key={s.slug} value={s.slug}>{s.title}</option>)}
               </select>
             </F>
-            <F err={errors.date} name="date" label="Event date *"><input name="date" type="date" className={input} /></F>
-            <F err={errors.time} name="time" label="Preferred time *"><input name="time" type="time" className={input} /></F>
-            <div className="md:col-span-2"><F err={errors.location} name="location" label="Event location *"><input name="location" maxLength={200} className={input} /></F></div>
-            <div className="md:col-span-2"><F err={errors.notes} name="notes" label="Additional requirements"><textarea name="notes" rows={4} maxLength={1000} className={input} /></F></div>
+            <F err={errors["date"]} name="date" label="Event date *"><input name="date" type="date" className={input} /></F>
+            <F err={errors["time"]} name="time" label="Preferred time *"><input name="time" type="time" className={input} /></F>
+            <div className="md:col-span-2"><F err={errors["location"]} name="location" label="Event location *"><input name="location" maxLength={200} className={input} /></F></div>
+            <div className="md:col-span-2"><F err={errors["notes"]} name="notes" label="Additional requirements"><textarea name="notes" rows={4} maxLength={1000} className={input} /></F></div>
             <button className="rounded-sm bg-primary px-7 py-4 text-sm tracking-wide text-primary-foreground hover:bg-gold hover:text-gold-foreground md:col-span-2">Send Enquiry</button>
           </form>
         )}
