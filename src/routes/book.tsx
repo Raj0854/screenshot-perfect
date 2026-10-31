@@ -7,7 +7,7 @@ import { services, waLink } from "@/lib/site";
 import { meta } from "@/lib/meta";
 
 export const Route = createFileRoute("/book")({
-  validateSearch: (s: Record<string, unknown>) => ({ service: typeof s.service === "string" ? s.service : undefined }),
+  validateSearch: (s: Record<string, unknown>): { service?: string } => (typeof s["service"] === "string" ? { service: s["service"] } : {}),
   head: () => ({ meta: meta("Book an Appointment — Moms Beauty Touch", "Send an appointment enquiry for bridal, party, wedding or engagement makeup in Vasai-Virar.") }),
   component: Book,
 });
