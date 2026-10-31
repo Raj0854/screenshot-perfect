@@ -16,8 +16,8 @@ export const business = {
     "Moms Beauty Touch, Near Manti Memorial High School, Naleswar Nagar, Kaner, Vasai-Virar, Maharashtra 401303",
 };
 
-export const waLink = (text?: string) =>
-  `https://wa.me/${business.whatsapp}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
+export const waLink = (text?: string, number: string = business.whatsapp) =>
+  `https://wa.me/${number}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
 
 export type Service = { slug: string; title: string; short: string; body: string; image: string };
 

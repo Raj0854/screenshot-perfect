@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { MapPin, Phone, MessageCircle, Clock } from "lucide-react";
+import { MapPin, Phone, MessageCircle, Clock, Instagram, Facebook } from "lucide-react";
 import { useState } from "react";
 import { PageHero } from "@/components/site/Layout";
-import { business, waLink } from "@/lib/site";
+import { waLink } from "@/lib/site";
+import { useBusiness } from "@/lib/data";
 import { meta } from "@/lib/meta";
 
 export const Route = createFileRoute("/contact")({
@@ -13,6 +14,7 @@ export const Route = createFileRoute("/contact")({
 const input = "w-full rounded-sm border border-input bg-card px-4 py-3 text-sm outline-none focus:border-gold";
 
 function Contact() {
+  const business = useBusiness();
   const [name, setName] = useState("");
   const [msg, setMsg] = useState("");
   return (
@@ -23,7 +25,7 @@ function Contact() {
           {[
             { I: MapPin, t: "Address", c: business.address },
             { I: Phone, t: "Phone", c: <a href={`tel:${business.phoneTel}`} className="hover:text-gold">{business.phoneDisplay}</a> },
-            { I: MessageCircle, t: "WhatsApp", c: <a href={waLink()} target="_blank" rel="noreferrer" className="hover:text-gold">Chat with us</a> },
+            { I: MessageCircle, t: "WhatsApp", c: <a href={waLink(undefined, business.whatsapp)} target="_blank" rel="noreferrer" className="hover:text-gold">Chat with us</a> },
             { I: Clock, t: "Hours", c: business.hours },
           ].map(({ I, t, c }) => (
             <div key={t} className="flex gap-5">
@@ -31,7 +33,13 @@ function Contact() {
               <div><p className="eyebrow">{t}</p><div className="mt-2">{c}</div></div>
             </div>
           ))}
-          <form className="space-y-4 border-t pt-8" onSubmit={(e) => { e.preventDefault(); window.open(waLink(`Hi, I'm ${name}. ${msg}`), "_blank"); }}>
+          {(business.instagram || business.facebook) && (
+            <div className="flex gap-4">
+              {business.instagram && <a href={business.instagram} target="_blank" rel="noreferrer" aria-label="Instagram" className="hover:text-gold"><Instagram /></a>}
+              {business.facebook && <a href={business.facebook} target="_blank" rel="noreferrer" aria-label="Facebook" className="hover:text-gold"><Facebook /></a>}
+            </div>
+          )}
+          <form className="space-y-4 border-t pt-8" onSubmit={(e) => { e.preventDefault(); window.open(waLink(`Hi, I'm ${name}. ${msg}`, business.whatsapp), "_blank"); }}>
             <h2 className="text-3xl">Send a message</h2>
             <input required maxLength={100} placeholder="Your name" className={input} value={name} onChange={(e) => setName(e.target.value)} />
             <textarea required maxLength={1000} rows={4} placeholder="Your message" className={input} value={msg} onChange={(e) => setMsg(e.target.value)} />
