@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHero } from "@/components/site/Layout";
 import { Reveal } from "@/components/site/Reveal";
-import { services } from "@/lib/site";
+import { useServices } from "@/lib/data";
 import { meta } from "@/lib/meta";
 
 export const Route = createFileRoute("/services/")({
@@ -10,6 +10,7 @@ export const Route = createFileRoute("/services/")({
 });
 
 function Services() {
+  const services = useServices();
   return (
     <>
       <PageHero eyebrow="Services" title="Makeup for your moments" text="Prices depend on your look and event. Ask us for a personalised quote." />
@@ -22,6 +23,7 @@ function Services() {
                 <p className="eyebrow">0{i + 1}</p>
                 <h2 className="mt-3 text-4xl md:text-5xl">{s.title}</h2>
                 <p className="mt-5 text-muted-foreground">{s.short}</p>
+                {s.price && <p className="mt-3 text-sm"><span className="eyebrow">Price</span> <span className="ml-2">{s.price}</span></p>}
                 <div className="mt-8 flex gap-4">
                   <Link to="/services/$slug" params={{ slug: s.slug }} className="rounded-sm border border-foreground/30 px-6 py-3 text-sm hover:border-gold">View Details</Link>
                   <Link to="/book" search={{ service: s.slug }} className="rounded-sm bg-primary px-6 py-3 text-sm text-primary-foreground hover:bg-gold hover:text-gold-foreground">Enquire Now</Link>

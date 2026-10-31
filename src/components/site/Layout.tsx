@@ -1,7 +1,8 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { Menu, MessageCircle, X, Star } from "lucide-react";
 import { useState, type ReactNode } from "react";
-import { business, waLink } from "@/lib/site";
+import { waLink } from "@/lib/site";
+import { useBusiness } from "@/lib/data";
 
 const nav = [
   { to: "/about", label: "About" },
@@ -12,6 +13,9 @@ const nav = [
 
 export function SiteLayout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
+  const business = useBusiness();
+  const { pathname } = useLocation();
+  if (pathname.startsWith("/admin")) return <>{children}</>;
   return (
     <div className="min-h-screen pb-16 md:pb-0">
       <header className="glass fixed inset-x-0 top-0 z-40 border-b">
@@ -64,7 +68,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         </div>
         <p className="border-t border-primary-foreground/10 py-6 text-center text-xs opacity-50">© {new Date().getFullYear()} Moms Beauty Touch</p>
       </footer>
-      <a href={waLink("Hello! I'd like to enquire about makeup.")} target="_blank" rel="noreferrer" aria-label="Chat on WhatsApp"
+      <a href={waLink("Hello! I'd like to enquire about makeup.", business.whatsapp)} target="_blank" rel="noreferrer" aria-label="Chat on WhatsApp"
         className="fixed bottom-20 right-5 z-40 grid size-14 place-items-center rounded-full bg-gold text-gold-foreground shadow-soft transition-transform hover:scale-110 md:bottom-6">
         <MessageCircle />
       </a>

@@ -3,7 +3,8 @@ import { Star, ArrowRight, Heart, Sparkles, Clock } from "lucide-react";
 import hero from "@/assets/hero.jpg";
 import studio from "@/assets/studio.jpg";
 import party from "@/assets/party.jpg";
-import { business, services, waLink } from "@/lib/site";
+import { waLink } from "@/lib/site";
+import { useBusiness, useServices, usePublishedTestimonials } from "@/lib/data";
 import { Reveal, SectionHead } from "@/components/site/Reveal";
 import { SampleNote } from "@/components/site/Layout";
 import { meta } from "@/lib/meta";
@@ -19,6 +20,9 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const business = useBusiness();
+  const services = useServices();
+  const reviews = usePublishedTestimonials();
   return (
     <>
       <section className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 pt-32 pb-20 md:grid-cols-12 md:pt-40">
@@ -120,7 +124,19 @@ function Index() {
       <section className="mx-auto max-w-4xl px-6 py-24 text-center">
         <SectionHead eyebrow="Reviews" title={`Rated ${business.rating} out of 5 on Google`} center />
         <Reveal>
-          <p className="mt-6 text-muted-foreground">Client reviews will be shared here as they're added.</p>
+          {reviews.length === 0 ? (
+            <p className="mt-6 text-muted-foreground">Client reviews will be shared here as they're added.</p>
+          ) : (
+            <div className="mt-12 grid gap-6 text-left md:grid-cols-2">
+              {reviews.slice(0, 4).map((r) => (
+                <figure key={r.id} className="rounded-sm bg-card p-8 shadow-soft">
+                  <div className="flex">{Array.from({ length: r.rating }).map((_, i) => <Star key={i} className="size-4 fill-gold text-gold" />)}</div>
+                  <blockquote className="mt-4 font-serif text-xl leading-snug">"{r.text}"</blockquote>
+                  <figcaption className="mt-4 text-sm text-muted-foreground">— {r.name}</figcaption>
+                </figure>
+              ))}
+            </div>
+          )}
           <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(business.mapQuery)}`} target="_blank" rel="noreferrer" className="mt-6 inline-block text-sm underline underline-offset-4 hover:text-gold">
             Read reviews on Google
           </a>
@@ -134,7 +150,7 @@ function Index() {
           <p className="mt-4 text-muted-foreground">Share your date and we'll get back to you to discuss the details.</p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link to="/book" className="rounded-sm bg-primary px-7 py-4 text-sm text-primary-foreground hover:bg-gold hover:text-gold-foreground">Book Your Appointment</Link>
-            <a href={waLink()} target="_blank" rel="noreferrer" className="rounded-sm border border-foreground/30 px-7 py-4 text-sm hover:border-gold">WhatsApp us</a>
+            <a href={waLink(undefined, business.whatsapp)} target="_blank" rel="noreferrer" className="rounded-sm border border-foreground/30 px-7 py-4 text-sm hover:border-gold">WhatsApp us</a>
           </div>
           <p className="mt-8 text-sm text-muted-foreground">{business.phoneDisplay} · {business.hours}</p>
         </div>
