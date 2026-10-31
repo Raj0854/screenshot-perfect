@@ -23,6 +23,16 @@ const schema = z.object({
   notes: z.string().max(1000).optional(),
 });
 
+function F({ name, label, children, err }: { name: string; label: string; children: React.ReactNode; err?: string }) {
+  return (
+    <label className="block">
+      <span className="mb-2 block text-xs tracking-widest uppercase text-muted-foreground">{label}</span>
+      {children}
+      {err && <span className="mt-1 block text-xs text-destructive">{err}</span>}
+    </label>
+  );
+}
+
 const input = "w-full rounded-sm border border-input bg-card px-4 py-3 text-sm outline-none focus:border-gold";
 
 function Book() {
@@ -45,14 +55,6 @@ function Book() {
     setSent(waLink(text));
   };
 
-  const F = ({ name, label, children }: { name: string; label: string; children: React.ReactNode }) => (
-    <label className="block">
-      <span className="mb-2 block text-xs tracking-widest uppercase text-muted-foreground">{label}</span>
-      {children}
-      {errors[name] && <span className="mt-1 block text-xs text-destructive">{errors[name]}</span>}
-    </label>
-  );
-
   return (
     <>
       <PageHero eyebrow="Booking" title="Book your appointment" text="Share your details and we'll get back to you to confirm availability." />
@@ -67,19 +69,19 @@ function Book() {
           </div>
         ) : (
           <form noValidate onSubmit={submit} className="grid gap-6 rounded-sm bg-card p-8 shadow-soft md:grid-cols-2 md:p-12">
-            <F name="name" label="Full name *"><input name="name" maxLength={100} className={input} /></F>
-            <F name="phone" label="Phone number *"><input name="phone" type="tel" className={input} placeholder="98765 43210" /></F>
-            <F name="email" label="Email (optional)"><input name="email" type="email" className={input} /></F>
-            <F name="service" label="Service *">
+            <F err={errors.name} name="name" label="Full name *"><input name="name" maxLength={100} className={input} /></F>
+            <F err={errors.phone} name="phone" label="Phone number *"><input name="phone" type="tel" className={input} placeholder="98765 43210" /></F>
+            <F err={errors.email} name="email" label="Email (optional)"><input name="email" type="email" className={input} /></F>
+            <F err={errors.service} name="service" label="Service *">
               <select name="service" defaultValue={service ?? ""} className={input}>
                 <option value="" disabled>Select a service</option>
                 {services.map((s) => <option key={s.slug} value={s.slug}>{s.title}</option>)}
               </select>
             </F>
-            <F name="date" label="Event date *"><input name="date" type="date" className={input} /></F>
-            <F name="time" label="Preferred time *"><input name="time" type="time" className={input} /></F>
-            <div className="md:col-span-2"><F name="location" label="Event location *"><input name="location" maxLength={200} className={input} /></F></div>
-            <div className="md:col-span-2"><F name="notes" label="Additional requirements"><textarea name="notes" rows={4} maxLength={1000} className={input} /></F></div>
+            <F err={errors.date} name="date" label="Event date *"><input name="date" type="date" className={input} /></F>
+            <F err={errors.time} name="time" label="Preferred time *"><input name="time" type="time" className={input} /></F>
+            <div className="md:col-span-2"><F err={errors.location} name="location" label="Event location *"><input name="location" maxLength={200} className={input} /></F></div>
+            <div className="md:col-span-2"><F err={errors.notes} name="notes" label="Additional requirements"><textarea name="notes" rows={4} maxLength={1000} className={input} /></F></div>
             <button className="rounded-sm bg-primary px-7 py-4 text-sm tracking-wide text-primary-foreground hover:bg-gold hover:text-gold-foreground md:col-span-2">Send Enquiry</button>
           </form>
         )}
