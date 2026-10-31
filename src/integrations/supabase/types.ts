@@ -14,16 +14,230 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      business_settings: {
+        Row: {
+          address: string
+          facebook: string
+          hours: string
+          id: number
+          instagram: string
+          name: string
+          phone: string
+          updated_at: string
+          whatsapp: string
+        }
+        Insert: {
+          address: string
+          facebook?: string
+          hours: string
+          id?: number
+          instagram?: string
+          name: string
+          phone: string
+          updated_at?: string
+          whatsapp: string
+        }
+        Update: {
+          address?: string
+          facebook?: string
+          hours?: string
+          id?: number
+          instagram?: string
+          name?: string
+          phone?: string
+          updated_at?: string
+          whatsapp?: string
+        }
+        Relationships: []
+      }
+      gallery_images: {
+        Row: {
+          alt: string
+          category: string
+          created_at: string
+          id: string
+          sort: number
+          url: string
+        }
+        Insert: {
+          alt?: string
+          category?: string
+          created_at?: string
+          id?: string
+          sort?: number
+          url: string
+        }
+        Update: {
+          alt?: string
+          category?: string
+          created_at?: string
+          id?: string
+          sort?: number
+          url?: string
+        }
+        Relationships: []
+      }
+      inquiries: {
+        Row: {
+          created_at: string
+          email: string | null
+          event_date: string
+          id: string
+          internal_notes: string
+          location: string
+          name: string
+          notes: string | null
+          phone: string
+          preferred_time: string
+          ref: string
+          service: string
+          status: Database["public"]["Enums"]["inquiry_status"]
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          event_date: string
+          id?: string
+          internal_notes?: string
+          location: string
+          name: string
+          notes?: string | null
+          phone: string
+          preferred_time: string
+          ref: string
+          service: string
+          status?: Database["public"]["Enums"]["inquiry_status"]
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          event_date?: string
+          id?: string
+          internal_notes?: string
+          location?: string
+          name?: string
+          notes?: string | null
+          phone?: string
+          preferred_time?: string
+          ref?: string
+          service?: string
+          status?: Database["public"]["Enums"]["inquiry_status"]
+        }
+        Relationships: []
+      }
+      services: {
+        Row: {
+          active: boolean
+          body: string
+          created_at: string
+          id: string
+          image_url: string | null
+          price: string
+          short: string
+          slug: string
+          sort: number
+          title: string
+        }
+        Insert: {
+          active?: boolean
+          body?: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          price?: string
+          short?: string
+          slug: string
+          sort?: number
+          title: string
+        }
+        Update: {
+          active?: boolean
+          body?: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          price?: string
+          short?: string
+          slug?: string
+          sort?: number
+          title?: string
+        }
+        Relationships: []
+      }
+      testimonials: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          published: boolean
+          rating: number
+          text: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          published?: boolean
+          rating?: number
+          text: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          published?: boolean
+          rating?: number
+          text?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      submit_inquiry: {
+        Args: {
+          _email: string
+          _event_date: string
+          _location: string
+          _name: string
+          _notes: string
+          _phone: string
+          _preferred_time: string
+          _service: string
+        }
+        Returns: string
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin"
+      inquiry_status: "pending" | "accepted" | "rejected" | "completed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +364,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin"],
+      inquiry_status: ["pending", "accepted", "rejected", "completed"],
+    },
   },
 } as const
